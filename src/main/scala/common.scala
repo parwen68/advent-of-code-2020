@@ -25,6 +25,10 @@ extension (s: String) def splitToTuple(c: Char) =
   val splitted = s.split(c)
   (splitted(0), splitted(1))
 
+extension (s: String) def splitToTuple(ss: String) =
+  val splitted = s.split(ss)
+  (splitted(0), splitted(1))
+
 def loadData(using day: Day): String = 
   given Day = day 
     fetching.loadData

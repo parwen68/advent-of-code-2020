@@ -6,20 +6,14 @@ package advent_of_code
   
   val data = loadData
 
-  val Pattern = """^(\d+)\s([\w\s]+)""".r
+  val keyPattern = """([\w\s]+) bags contain""".r
+  val listPattern = """(\d+) ([\w\s]+) bag[s]{0,1}""".r
 
-  val adj = data
-    .split("\n")
-    .map(_.splitToTuple("contain"))
-    .map((a,b) => a.replaceAll("bag[s]{0,1}", "") -> b.replaceAll("bag[s]{0,1}", ""))
-    .map((a,b) => a.trim -> b.replace(".", ""))
-    .map((a,b) => a -> b.split(",").toList.map(_.trim))
-    .map{(a,b) => 
-      (a, b.flatMap(_ match { 
-        case Pattern(count, name) => Option(name -> count) 
-        case _ => None
-      }).toMap)
-    }.toMap
+  val adj = data.split("\n")
+    .map(line => (
+      keyPattern.findFirstMatchIn(line).map(_.group(1)).toList(0),  
+      listPattern.findAllMatchIn(line).map(m => (m.group(2) -> m.group(1))).toMap
+    )).toMap
 
   def find(start: String, visited: Set[String] = Set()): Set[String] =
     if visited.contains(start) 

@@ -22,8 +22,8 @@ package advent_of_code
         if !ctx.sums.flatMap((_, v) => v).contains(next)
           then ctx #:: LazyList.empty
           else 
-            val oldest = ctx.sums.drop(1)
-            val newSums = oldest :+ (next, oldest.map(_._1 + next).toList) 
+            val sumsWithOldestDroped = ctx.sums.drop(1)
+            val newSums = sumsWithOldestDroped :+ (next, sumsWithOldestDroped.map(_._1 + next).toList) 
             val newRemaining = ctx.remaining.drop(1)
             Context(newSums, newRemaining) #:: loop(Context(newSums, newRemaining))
 

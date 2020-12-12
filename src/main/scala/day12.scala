@@ -33,6 +33,8 @@ package advent_of_code
     }
   }
 
+  val instructions = data.split("\n").map(parse)
+
   part1
   part2
 
@@ -41,12 +43,8 @@ package advent_of_code
 
     def turn(from: Int, d: Int) = {
       val n = from + d
-      if n < 0 
-        then (n + 360) % 360
-        else n % 360
+      (if n < 0 then (n + 360) else n) % 360
     }
-
-    val instructions = data.split("\n").map(parse)
 
     val pos = instructions.foldLeft(Pos()){ (p, instr) => instr match
       case MoveNorth(steps) => p.copy(y = p.y + steps)
@@ -56,14 +54,15 @@ package advent_of_code
       case TurnLeft(degrees) => p.copy(d = turn(p.d, -degrees))
       case TurnRight(degrees) => p.copy(d = turn(p.d, degrees))
       case MoveForward(steps) => { p.d match {
-        case 0 => p.copy(y = p.y + steps)
-        case 90 => p.copy(x = p.x + steps)
+        case   0 => p.copy(y = p.y + steps)
+        case  90 => p.copy(x = p.x + steps)
         case 180 => p.copy(y = p.y - steps)
         case 270 => p.copy(x = p.x - steps)
       }}
     }
 
     val result = Math.abs(pos.x) + Math.abs(pos.y)
+
     printResult(result)
     
   def part2 =
@@ -71,13 +70,11 @@ package advent_of_code
 
     def turn(wp: Pos, d: Int) = {
       d match {
-        case (90 | -270) => wp.copy(x = wp.y, y = -wp.x)
+        case ( 90 | -270) => wp.copy(x = wp.y, y = -wp.x)
         case (180 | -180) => wp.copy(x = -wp.x, y = -wp.y)
-        case (-90 | 270)  => wp.copy(x = -wp.y, y = wp.x)
+        case (-90 |  270)  => wp.copy(x = -wp.y, y = wp.x)
       }
     }
-
-    val instructions = data.split("\n").map(parse)
 
     val (pos, _) = instructions.foldLeft((Pos(), Pos(10,1))){ 
       case ((ship, wp), instr) => instr match
@@ -92,4 +89,5 @@ package advent_of_code
     }
 
     val result = Math.abs(pos.x) + Math.abs(pos.y)
+
     printResult(result)

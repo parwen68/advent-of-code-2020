@@ -14,9 +14,8 @@ import scala.util._
   case class State(numbers: Map[Long, Long] = Map.empty, last: Long, pos: Long) {
     def next: State =
       if !numbers.contains(last) 
-        State(numbers + (last -> pos), 0L, pos + 1)
-      else  
-        State(numbers + (last -> pos), pos - numbers(last), pos + 1)
+        then State(numbers + (last -> pos), 0L, pos + 1)
+        else State(numbers + (last -> pos), pos - numbers(last), pos + 1)
   }
 
   def find(num: Int): Long =
